@@ -3116,11 +3116,12 @@ export class StrategyEngine {
       // 止盈价计算
       let theoreticalTP: number;
       const tpMultiplier = side === 'BUY' ? 1 : -1;
+      const tpMode = side === 'BUY' ? this.settings.order.tpModeBuy : this.settings.order.tpModeSell;
 
-      if (this.settings.order.tpMode === 'fixed') {
+      if (tpMode === 'fixed') {
         const tpFixed = side === 'BUY' ? this.settings.order.tpFixedBuy : this.settings.order.tpFixedSell;
         theoreticalTP = kBestClose * (1 + tpMultiplier * tpFixed / 100);
-      } else if (this.settings.order.tpMode === 'amp') {
+      } else if (tpMode === 'amp') {
         const amp = kBestHigh > 0 ? (1 - kBestLow / kBestHigh) : 0;
         const tpAmp = (side === 'BUY' ? this.settings.order.tpAmpBuy : this.settings.order.tpAmpSell) ?? 25;
         theoreticalTP = kBestClose * (1 + tpMultiplier * amp * tpAmp / 100);
@@ -3133,11 +3134,12 @@ export class StrategyEngine {
       // 止损价计算
       let theoreticalSL: number;
       const slMultiplier = side === 'BUY' ? -1 : 1;
+      const slMode = side === 'BUY' ? this.settings.order.slModeBuy : this.settings.order.slModeSell;
 
-      if (this.settings.order.slMode === 'fixed') {
+      if (slMode === 'fixed') {
         const slFixed = side === 'BUY' ? this.settings.order.slFixedBuy : this.settings.order.slFixedSell;
         theoreticalSL = kBestClose * (1 + slMultiplier * slFixed / 100);
-      } else if (this.settings.order.slMode === 'amp') {
+      } else if (slMode === 'amp') {
         const amp = kBestHigh > 0 ? (1 - kBestLow / kBestHigh) : 0;
         const slAmp = (side === 'BUY' ? this.settings.order.slAmpBuy : this.settings.order.slAmpSell) ?? 55;
         theoreticalSL = kBestClose * (1 + slMultiplier * amp * slAmp / 100);
@@ -3211,13 +3213,16 @@ export class StrategyEngine {
 
       this.addLog('下单', `检测到持仓: ${symbol}, 数量: ${actualQuantity}, 准备挂单...`, 'info');
 
+      const sideTpEnabled = side === 'BUY' ? (this.settings.order.tpBuyEnabled ?? true) : (this.settings.order.tpSellEnabled ?? true);
+      const sideSlEnabled = side === 'BUY' ? (this.settings.order.slBuyEnabled ?? true) : (this.settings.order.slSellEnabled ?? true);
+
       // 检查是否已经存在挂单，避免重复挂单风险
       const existingOrders = this.accountData.openOrders.filter((o: any) => o.symbol === symbol);
       const hasLimit = existingOrders.some((o: any) => !o.isAlgo);
       const hasAlgo = existingOrders.some((o: any) => o.isAlgo);
 
       // 挂止盈单 (Limit Sell/Buy)
-      if (!hasLimit && this.settings.order.tpEnabled !== false) {
+      if (!hasLimit && this.settings.order.tpEnabled !== false && sideTpEnabled) {
         const tpOrder = await this.binance.placeOrder({
           symbol,
           side: side === 'BUY' ? 'SELL' : 'BUY',
@@ -3229,14 +3234,16 @@ export class StrategyEngine {
         });
         this.addLog('下单', `[最高] limit挂单完成: ${symbol}, 方向: ${side === 'BUY' ? 'SELL' : 'BUY'}, 价格: ${formattedTP}, 订单ID: ${tpOrder.orderId}`, 'success', tpOrder);
       } else if (this.settings.order.tpEnabled === false) {
-        this.addLog('下单', `${symbol} 已关闭止盈挂单功能`, 'info');
+        this.addLog('下单', `${symbol} 已关闭止盈挂单功能（全局）`, 'info');
+      } else if (!sideTpEnabled) {
+        this.addLog('下单', `${symbol} 已关闭 ${side === 'BUY' ? '多' : '空'}单止盈挂单功能`, 'info');
       } else {
         this.addLog('下单', `${symbol} 已存在 Limit 挂单，跳过重复挂单`, 'info');
       }
 
       // 只有在 limit 挂单成功后，再下 algo 委托单
       // 挂止损单 (Algo Stop Market)
-      if (!hasAlgo && this.settings.order.slEnabled !== false) {
+      if (!hasAlgo && this.settings.order.slEnabled !== false && sideSlEnabled) {
         try {
           // 预检：在下止损单前，先获取最新市场价
           const ticker = await this.binance.getTickerPrice(symbol);
@@ -3272,7 +3279,9 @@ export class StrategyEngine {
           }
         }
       } else if (this.settings.order.slEnabled === false) {
-        this.addLog('下单', `${symbol} 已关闭止损挂单功能`, 'info');
+        this.addLog('下单', `${symbol} 已关闭止损挂单功能（全局）`, 'info');
+      } else if (!sideSlEnabled) {
+        this.addLog('下单', `${symbol} 已关闭 ${side === 'BUY' ? '多' : '空'}单止损挂单功能`, 'info');
       } else {
         this.addLog('下单', `${symbol} 已存在 Algo 挂单，跳过重复挂单`, 'info');
       }

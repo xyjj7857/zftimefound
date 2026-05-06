@@ -549,37 +549,57 @@ export default function SettingsPanel({
                       <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">止盈设置</span>
                       <Toggle enabled={localSettings.order.tpEnabled ?? true} onChange={e => setLocalSettings({...localSettings, order: {...localSettings.order, tpEnabled: e}})} />
                     </div>
-                    <div className="flex bg-slate-200 p-0.5 rounded-lg">
-                      <button 
-                        onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, tpMode: 'ratio'}})}
-                        className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.tpMode === 'ratio' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500'}`}
-                      >比例</button>
-                      <button 
-                        onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, tpMode: 'fixed'}})}
-                        className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.tpMode === 'fixed' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500'}`}
-                      >固定</button>
-                      <button 
-                        onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, tpMode: 'amp'}})}
-                        className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.tpMode === 'amp' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500'}`}
-                      >振比</button>
-                    </div>
                   </div>
-                  {localSettings.order.tpMode === 'ratio' ? (
-                    <div className="grid grid-cols-2 gap-4">
+                  
+                  {/* 多单止盈 */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-bold text-slate-400">多单止盈模式</span>
+                        <Toggle enabled={localSettings.order.tpBuyEnabled ?? true} onChange={e => setLocalSettings({...localSettings, order: {...localSettings.order, tpBuyEnabled: e}})} />
+                      </div>
+                      <div className="flex bg-slate-200 p-0.5 rounded-lg">
+                        {(['ratio', 'fixed', 'amp'] as const).map(m => (
+                          <button key={m} onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, tpModeBuy: m}})}
+                            className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.tpModeBuy === m ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500'}`}>
+                            {m === 'ratio' ? '比例' : m === 'fixed' ? '固定' : '振比'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {localSettings.order.tpModeBuy === 'ratio' ? (
                       <Input label="多 比例 TPB (%)" type="number" value={String(localSettings.order?.tpRatioBuy ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpRatioBuy: Number(v)}})} />
-                      <Input label="空 比例 TPB (%)" type="number" value={String(localSettings.order?.tpRatioSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpRatioSell: Number(v)}})} />
-                    </div>
-                  ) : localSettings.order.tpMode === 'fixed' ? (
-                    <div className="grid grid-cols-2 gap-4">
+                    ) : localSettings.order.tpModeBuy === 'fixed' ? (
                       <Input label="多 固定值 (%)" type="number" value={String(localSettings.order?.tpFixedBuy ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpFixedBuy: Number(v)}})} />
+                    ) : (
+                      <Input label="多 振比 (%)" type="number" value={String(localSettings.order?.tpAmpBuy ?? 20)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpAmpBuy: Number(v)}})} />
+                    )}
+                  </div>
+
+                  {/* 空单止盈 */}
+                  <div className="space-y-3 border-t border-slate-100 pt-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-bold text-slate-400">空单止盈模式</span>
+                        <Toggle enabled={localSettings.order.tpSellEnabled ?? true} onChange={e => setLocalSettings({...localSettings, order: {...localSettings.order, tpSellEnabled: e}})} />
+                      </div>
+                      <div className="flex bg-slate-200 p-0.5 rounded-lg">
+                        {(['ratio', 'fixed', 'amp'] as const).map(m => (
+                          <button key={m} onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, tpModeSell: m}})}
+                            className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.tpModeSell === m ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500'}`}>
+                            {m === 'ratio' ? '比例' : m === 'fixed' ? '固定' : '振比'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {localSettings.order.tpModeSell === 'ratio' ? (
+                      <Input label="空 比例 TPB (%)" type="number" value={String(localSettings.order?.tpRatioSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpRatioSell: Number(v)}})} />
+                    ) : localSettings.order.tpModeSell === 'fixed' ? (
                       <Input label="空 固定值 (%)" type="number" value={String(localSettings.order?.tpFixedSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpFixedSell: Number(v)}})} />
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-4">
-                      <Input label="多 振比 (%)" type="number" value={String(localSettings.order?.tpAmpBuy ?? 25)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpAmpBuy: Number(v)}})} />
-                      <Input label="空 振比 (%)" type="number" value={String(localSettings.order?.tpAmpSell ?? 25)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpAmpSell: Number(v)}})} />
-                    </div>
-                  )}
+                    ) : (
+                      <Input label="空 振比 (%)" type="number" value={String(localSettings.order?.tpAmpSell ?? 20)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpAmpSell: Number(v)}})} />
+                    )}
+                  </div>
                 </div>
 
                 <div className="p-5 bg-slate-50/50 rounded-3xl border border-slate-100 space-y-4">
@@ -588,37 +608,57 @@ export default function SettingsPanel({
                       <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">止损设置</span>
                       <Toggle enabled={localSettings.order.slEnabled ?? false} onChange={e => setLocalSettings({...localSettings, order: {...localSettings.order, slEnabled: e}})} />
                     </div>
-                    <div className="flex bg-slate-200 p-0.5 rounded-lg">
-                      <button 
-                        onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, slMode: 'ratio'}})}
-                        className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.slMode === 'ratio' ? 'bg-white text-red-600 shadow-sm' : 'text-slate-500'}`}
-                      >比例</button>
-                      <button 
-                        onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, slMode: 'fixed'}})}
-                        className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.slMode === 'fixed' ? 'bg-white text-red-600 shadow-sm' : 'text-slate-500'}`}
-                      >固定</button>
-                      <button 
-                        onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, slMode: 'amp'}})}
-                        className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.slMode === 'amp' ? 'bg-white text-red-600 shadow-sm' : 'text-slate-500'}`}
-                      >振比</button>
-                    </div>
                   </div>
-                  {localSettings.order.slMode === 'ratio' ? (
-                    <div className="grid grid-cols-2 gap-4">
+
+                  {/* 多单止损 */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-bold text-slate-400">多单止损模式</span>
+                        <Toggle enabled={localSettings.order.slBuyEnabled ?? true} onChange={e => setLocalSettings({...localSettings, order: {...localSettings.order, slBuyEnabled: e}})} />
+                      </div>
+                      <div className="flex bg-slate-200 p-0.5 rounded-lg">
+                        {(['ratio', 'fixed', 'amp'] as const).map(m => (
+                          <button key={m} onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, slModeBuy: m}})}
+                            className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.slModeBuy === m ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-500'}`}>
+                            {m === 'ratio' ? '比例' : m === 'fixed' ? '固定' : '振比'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {localSettings.order.slModeBuy === 'ratio' ? (
                       <Input label="多 比例 SLB (%)" type="number" value={String(localSettings.order?.slRatioBuy ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slRatioBuy: Number(v)}})} />
-                      <Input label="空 比例 SLB (%)" type="number" value={String(localSettings.order?.slRatioSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slRatioSell: Number(v)}})} />
-                    </div>
-                  ) : localSettings.order.slMode === 'fixed' ? (
-                    <div className="grid grid-cols-2 gap-4">
+                    ) : localSettings.order.slModeBuy === 'fixed' ? (
                       <Input label="多 固定值 (%)" type="number" value={String(localSettings.order?.slFixedBuy ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slFixedBuy: Number(v)}})} />
-                      <Input label="空 固定值 (%)" type="number" value={String(localSettings.order?.slFixedSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slFixedSell: Number(v)}})} />
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-4">
+                    ) : (
                       <Input label="多 振比 (%)" type="number" value={String(localSettings.order?.slAmpBuy ?? 55)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slAmpBuy: Number(v)}})} />
-                      <Input label="空 振比 (%)" type="number" value={String(localSettings.order?.slAmpSell ?? 55)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slAmpSell: Number(v)}})} />
+                    )}
+                  </div>
+
+                  {/* 空单止损 */}
+                  <div className="space-y-3 border-t border-slate-100 pt-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-bold text-slate-400">空单止损模式</span>
+                        <Toggle enabled={localSettings.order.slSellEnabled ?? true} onChange={e => setLocalSettings({...localSettings, order: {...localSettings.order, slSellEnabled: e}})} />
+                      </div>
+                      <div className="flex bg-slate-200 p-0.5 rounded-lg">
+                        {(['ratio', 'fixed', 'amp'] as const).map(m => (
+                          <button key={m} onClick={() => setLocalSettings({...localSettings, order: {...localSettings.order, slModeSell: m}})}
+                            className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${localSettings.order.slModeSell === m ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-500'}`}>
+                            {m === 'ratio' ? '比例' : m === 'fixed' ? '固定' : '振比'}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  )}
+                    {localSettings.order.slModeSell === 'ratio' ? (
+                      <Input label="空 比例 SLB (%)" type="number" value={String(localSettings.order?.slRatioSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slRatioSell: Number(v)}})} />
+                    ) : localSettings.order.slModeSell === 'fixed' ? (
+                      <Input label="空 固定值 (%)" type="number" value={String(localSettings.order?.slFixedSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slFixedSell: Number(v)}})} />
+                    ) : (
+                      <Input label="空 振比 (%)" type="number" value={String(localSettings.order?.slAmpSell ?? 55)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slAmpSell: Number(v)}})} />
+                    )}
+                  </div>
                 </div>
               </div>
 

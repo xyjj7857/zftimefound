@@ -64,7 +64,8 @@ export interface OrderSettings {
   leverage: number;
   positionRatio: number;
   maxPosition: number;
-  tpMode: 'ratio' | 'fixed' | 'amp';
+  tpModeBuy: 'ratio' | 'fixed' | 'amp';
+  tpModeSell: 'ratio' | 'fixed' | 'amp';
   tpRatioBuy: number;
   tpRatioSell: number;
   tpFixedBuy: number;
@@ -72,7 +73,10 @@ export interface OrderSettings {
   tpAmpBuy?: number;
   tpAmpSell?: number;
   tpEnabled?: boolean; // 新增：是否开启止盈挂单
-  slMode: 'ratio' | 'fixed' | 'amp';
+  tpBuyEnabled?: boolean;
+  tpSellEnabled?: boolean;
+  slModeBuy: 'ratio' | 'fixed' | 'amp';
+  slModeSell: 'ratio' | 'fixed' | 'amp';
   slRatioBuy: number;
   slRatioSell: number;
   slFixedBuy: number;
@@ -80,6 +84,8 @@ export interface OrderSettings {
   slAmpBuy?: number;
   slAmpSell?: number;
   slEnabled?: boolean; // 新增：是否开启止损挂单
+  slBuyEnabled?: boolean;
+  slSellEnabled?: boolean;
   mLinkEnabled?: boolean; // 新增：关联M生效
   mLinkValue?: number; // 新增：关联M值
   positiveWindow: number;
