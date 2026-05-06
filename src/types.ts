@@ -65,14 +65,20 @@ export interface OrderSettings {
   positionRatio: number;
   maxPosition: number;
   tpMode: 'ratio' | 'fixed' | 'amp';
-  tpRatio: number;
-  tpFixed: number;
-  tpAmp?: number;
+  tpRatioBuy: number;
+  tpRatioSell: number;
+  tpFixedBuy: number;
+  tpFixedSell: number;
+  tpAmpBuy?: number;
+  tpAmpSell?: number;
   tpEnabled?: boolean; // 新增：是否开启止盈挂单
   slMode: 'ratio' | 'fixed' | 'amp';
-  slRatio: number;
-  slFixed: number;
-  slAmp?: number;
+  slRatioBuy: number;
+  slRatioSell: number;
+  slFixedBuy: number;
+  slFixedSell: number;
+  slAmpBuy?: number;
+  slAmpSell?: number;
   slEnabled?: boolean; // 新增：是否开启止损挂单
   mLinkEnabled?: boolean; // 新增：关联M生效
   mLinkValue?: number; // 新增：关联M值

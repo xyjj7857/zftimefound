@@ -565,11 +565,20 @@ export default function SettingsPanel({
                     </div>
                   </div>
                   {localSettings.order.tpMode === 'ratio' ? (
-                    <Input label="比例 TPB (%)" type="number" value={String(localSettings.order?.tpRatio ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpRatio: Number(v)}})} />
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input label="多 比例 TPB (%)" type="number" value={String(localSettings.order?.tpRatioBuy ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpRatioBuy: Number(v)}})} />
+                      <Input label="空 比例 TPB (%)" type="number" value={String(localSettings.order?.tpRatioSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpRatioSell: Number(v)}})} />
+                    </div>
                   ) : localSettings.order.tpMode === 'fixed' ? (
-                    <Input label="固定值 (%)" type="number" value={String(localSettings.order?.tpFixed ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpFixed: Number(v)}})} />
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input label="多 固定值 (%)" type="number" value={String(localSettings.order?.tpFixedBuy ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpFixedBuy: Number(v)}})} />
+                      <Input label="空 固定值 (%)" type="number" value={String(localSettings.order?.tpFixedSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpFixedSell: Number(v)}})} />
+                    </div>
                   ) : (
-                    <Input label="振比 (%)" type="number" value={String(localSettings.order?.tpAmp ?? 25)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpAmp: Number(v)}})} />
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input label="多 振比 (%)" type="number" value={String(localSettings.order?.tpAmpBuy ?? 25)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpAmpBuy: Number(v)}})} />
+                      <Input label="空 振比 (%)" type="number" value={String(localSettings.order?.tpAmpSell ?? 25)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, tpAmpSell: Number(v)}})} />
+                    </div>
                   )}
                 </div>
 
@@ -595,11 +604,20 @@ export default function SettingsPanel({
                     </div>
                   </div>
                   {localSettings.order.slMode === 'ratio' ? (
-                    <Input label="比例 SLB (%)" type="number" value={String(localSettings.order?.slRatio ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slRatio: Number(v)}})} />
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input label="多 比例 SLB (%)" type="number" value={String(localSettings.order?.slRatioBuy ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slRatioBuy: Number(v)}})} />
+                      <Input label="空 比例 SLB (%)" type="number" value={String(localSettings.order?.slRatioSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slRatioSell: Number(v)}})} />
+                    </div>
                   ) : localSettings.order.slMode === 'fixed' ? (
-                    <Input label="固定值 (%)" type="number" value={String(localSettings.order?.slFixed ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slFixed: Number(v)}})} />
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input label="多 固定值 (%)" type="number" value={String(localSettings.order?.slFixedBuy ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slFixedBuy: Number(v)}})} />
+                      <Input label="空 固定值 (%)" type="number" value={String(localSettings.order?.slFixedSell ?? '')} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slFixedSell: Number(v)}})} />
+                    </div>
                   ) : (
-                    <Input label="振比 (%)" type="number" value={String(localSettings.order?.slAmp ?? 55)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slAmp: Number(v)}})} />
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input label="多 振比 (%)" type="number" value={String(localSettings.order?.slAmpBuy ?? 55)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slAmpBuy: Number(v)}})} />
+                      <Input label="空 振比 (%)" type="number" value={String(localSettings.order?.slAmpSell ?? 55)} onChange={v => setLocalSettings({...localSettings, order: {...localSettings.order, slAmpSell: Number(v)}})} />
+                    </div>
                   )}
                 </div>
               </div>

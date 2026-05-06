@@ -3118,13 +3118,14 @@ export class StrategyEngine {
       const tpMultiplier = side === 'BUY' ? 1 : -1;
 
       if (this.settings.order.tpMode === 'fixed') {
-        theoreticalTP = kBestClose * (1 + tpMultiplier * this.settings.order.tpFixed / 100);
+        const tpFixed = side === 'BUY' ? this.settings.order.tpFixedBuy : this.settings.order.tpFixedSell;
+        theoreticalTP = kBestClose * (1 + tpMultiplier * tpFixed / 100);
       } else if (this.settings.order.tpMode === 'amp') {
         const amp = kBestHigh > 0 ? (1 - kBestLow / kBestHigh) : 0;
-        const tpAmp = (this.settings.order.tpAmp ?? 25) / 100;
-        theoreticalTP = kBestClose * (1 + tpMultiplier * amp * tpAmp);
+        const tpAmp = (side === 'BUY' ? this.settings.order.tpAmpBuy : this.settings.order.tpAmpSell) ?? 25;
+        theoreticalTP = kBestClose * (1 + tpMultiplier * amp * tpAmp / 100);
       } else {
-        const tpRatio = this.settings.order.tpRatio / 100;
+        const tpRatio = (side === 'BUY' ? this.settings.order.tpRatioBuy : this.settings.order.tpRatioSell) / 100;
         // 采用绝对值并根据方向乘以系数，确保 TP 的方向永远正确
         theoreticalTP = kBestClose * (1 + tpMultiplier * Math.abs(kBestChange) * tpRatio);
       }
@@ -3134,13 +3135,14 @@ export class StrategyEngine {
       const slMultiplier = side === 'BUY' ? -1 : 1;
 
       if (this.settings.order.slMode === 'fixed') {
-        theoreticalSL = kBestClose * (1 + slMultiplier * this.settings.order.slFixed / 100);
+        const slFixed = side === 'BUY' ? this.settings.order.slFixedBuy : this.settings.order.slFixedSell;
+        theoreticalSL = kBestClose * (1 + slMultiplier * slFixed / 100);
       } else if (this.settings.order.slMode === 'amp') {
         const amp = kBestHigh > 0 ? (1 - kBestLow / kBestHigh) : 0;
-        const slAmp = (this.settings.order.slAmp ?? 55) / 100;
-        theoreticalSL = kBestClose * (1 + slMultiplier * amp * slAmp);
+        const slAmp = (side === 'BUY' ? this.settings.order.slAmpBuy : this.settings.order.slAmpSell) ?? 55;
+        theoreticalSL = kBestClose * (1 + slMultiplier * amp * slAmp / 100);
       } else {
-        const slRatio = this.settings.order.slRatio / 100;
+        const slRatio = (side === 'BUY' ? this.settings.order.slRatioBuy : this.settings.order.slRatioSell) / 100;
         theoreticalSL = kBestClose * (1 + slMultiplier * Math.abs(kBestChange) * slRatio);
       }
 
