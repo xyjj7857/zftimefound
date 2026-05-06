@@ -144,7 +144,7 @@ export default function TradeLogs({ tradeLogs, onClear, accountId }: { tradeLogs
                 </span>
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">累计资金费率</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">累计资金费</span>
                 <span className={`text-sm font-black ${totals.fundingFee >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                   {totals.fundingFee >= 0 ? '+' : ''}{totals.fundingFee.toFixed(4)} <span className="text-[10px] font-medium text-slate-400">USDT</span>
                 </span>
@@ -222,6 +222,7 @@ export default function TradeLogs({ tradeLogs, onClear, accountId }: { tradeLogs
               <tr className="text-[11px] font-medium text-slate-400 uppercase tracking-wider border-b border-slate-50">
                 <th className="pb-4 font-normal w-[180px]">合约</th>
                 <th className="pb-4 font-normal w-[80px]">方向</th>
+                <th className="pb-4 font-normal w-[100px]">资金费率</th>
                 <th className="pb-4 font-normal w-[80px]">振幅</th>
                 <th className="pb-4 font-normal w-[80px]">M值</th>
                 <th className="pb-4 font-normal w-[80px]">真实A</th>
@@ -242,13 +243,15 @@ export default function TradeLogs({ tradeLogs, onClear, accountId }: { tradeLogs
                       <div className="font-black text-slate-900 text-sm truncate">{log.symbol}</div>
                       <div className="text-[10px] text-slate-400 font-medium truncate">
                         {log.leverage}x · {log.amount} 
-                        {log.fundingRate !== undefined && ` · FR: ${(log.fundingRate * 100).toFixed(4)}%`}
                       </div>
                     </td>
                     <td className="py-5">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-black ${log.side === 'BUY' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
                         {log.side === 'BUY' ? '做多' : '做空'}
                       </span>
+                    </td>
+                    <td className="py-5 font-mono text-xs font-bold text-slate-500 whitespace-nowrap">
+                      {log.fundingRate !== undefined ? (log.fundingRate * 100).toFixed(4) + '%' : '--'}
                     </td>
                     <td className="py-5 font-mono text-xs font-bold text-slate-500 whitespace-nowrap">
                       {log.amp !== undefined ? log.amp.toFixed(2) + '%' : '--'}
@@ -290,7 +293,7 @@ export default function TradeLogs({ tradeLogs, onClear, accountId }: { tradeLogs
                 ))
               ) : (
                 <tr>
-                  <td colSpan={12} className="py-20 text-center">
+                  <td colSpan={13} className="py-20 text-center">
                     <div className="flex flex-col items-center gap-3">
                       <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center">
                         <Filter size={20} className="text-slate-300" />
