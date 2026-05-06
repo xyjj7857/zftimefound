@@ -1,0 +1,197 @@
+import { AppSettings } from "./types";
+
+export const APP_NAME = "超强振幅";
+
+export const DEFAULT_SETTINGS: AppSettings = {
+  appName: APP_NAME,
+  accounts: [
+    {
+      id: "main",
+      name: "out",
+      enabled: true,
+      isMasterAccount: true,
+      binance: {
+        apiKey: "oDQleHC2fKUyLORiNvYxDhbjMwd0tSJerZ16UpDeodVpftUt5rajHDac8f0qhPZX",
+        secretKey: "APwIfMbrtqw3oo0Xi3xmm4JgyXepOI1m0GVAurggIyw0VWJ1hWU0QpXJ3e7Yxoes",
+        baseUrl: "https://fapi.binance.com",
+        wsUrl: "wss://fstream.binance.com/ws",
+      },
+      scanner: {
+        stage0: {
+          interval: "1h",
+          startTime: "00:06:00.000",
+          klinePeriod: "15m",
+          minKlines: 300,
+          maxKlines: 115000,
+          includeTradFi: false,
+        },
+        stage0P: {
+          enabled: true,
+          interval: "15m",
+          startTime: "00:07:36.000",
+          periods: {
+            "15m": { enabled: false, count: 7, threshold: -3 },
+          },
+          abnormalMove: {
+            enabled: false,
+            lookbackHours: 10,
+            windowMinutes: 60,
+            maxPump: 25,
+            maxDrop: 30,
+          }
+        },
+        stage1: {
+          interval: "15m",
+          startTime: "00:13:54.300",
+          minVolumeM1: 500000,
+          priceChangeK1: [-100, 100],
+          whitelist: [],
+          blacklist: [],
+        },
+        stage2: {
+          interval: "15m",
+          startTime: "00:14:59.300",
+          cooldown: 0,
+          preferredMode: 'volume',
+          conditions: {
+            amp: { enabled: true, range: [10, 30] },
+            longShort: { enabled: true, buyEnabled: true, buy: 80, sellEnabled: false, sell: 20 },
+            m: { enabled: true, range: [2980000, 100000000] },
+          },
+        },
+        timeControl: {
+          enabled: true,
+          hours: Array(24).fill(true),
+          mode: '+2',
+        },
+      },
+      order: {
+        leverage: 5,
+        positionRatio: 50,
+        maxPosition: 40000,
+        tpMode: 'amp',
+        tpRatio: 42,
+        tpFixed: 2,
+        tpAmp: 20,
+        tpEnabled: true,
+        slMode: 'amp',
+        slRatio: 85,
+        slFixed: 3,
+        slAmp: 55,
+        slEnabled: false,
+        mLinkEnabled: false,
+        mLinkValue: 1800,
+        positiveWindow: 0.7,
+        maxHoldTime: 14.9,
+        kBestPeriod: "15m",
+        kBestWindow: [1, 5],
+      },
+      withdrawal: {
+        withdrawalThreshold: 518,
+        retentionThreshold: 488,
+        alarmThreshold: 5,
+      },
+    },
+    {
+      id: "1",
+      name: "xuni",
+      enabled: true,
+      isMasterAccount: false,
+      binance: {
+        apiKey: "VsOQrj0yiCqTzDvYtQIXFj1UOqGrXJx8sMlJ1OjRYHcSWZgohExAANZnqFPAKrcZ",
+        secretKey: "BfWn7Ro67EALfPj5RIA9E2WENLEmCi7Az4Du5Zsy34wuup3EhAZ4Ha8Wo5OGOtBk",
+        baseUrl: "https://fapi.binance.com",
+        wsUrl: "wss://fstream.binance.com/ws",
+      },
+      scanner: {
+        stage0: {
+          interval: "1h",
+          startTime: "00:21:00.000",
+          klinePeriod: "15m",
+          minKlines: 300,
+          maxKlines: 115000,
+          includeTradFi: false,
+        },
+        stage0P: {
+          enabled: false,
+          interval: "15m",
+          startTime: "00:10:16.000",
+          periods: {
+            "15m": { enabled: false, count: 7, threshold: -3 },
+          },
+          abnormalMove: {
+            enabled: false,
+            lookbackHours: 10,
+            windowMinutes: 60,
+            maxPump: 25,
+            maxDrop: 30,
+          }
+        },
+        stage1: {
+          interval: "15m",
+          startTime: "00:14:51.600",
+          minVolumeM1: 500000,
+          priceChangeK1: [-100, 100],
+          whitelist: [],
+          blacklist: [],
+        },
+        stage2: {
+          interval: "15m",
+          startTime: "00:14:59.600",
+          cooldown: 0,
+          preferredMode: 'amp',
+          conditions: {
+            amp: { enabled: true, range: [10, 30] },
+            longShort: { enabled: true, buyEnabled: true, buy: 80, sellEnabled: false, sell: 20 },
+            m: { enabled: true, range: [2980000, 100000000] },
+          },
+        },
+        timeControl: {
+          enabled: true,
+          hours: Array(24).fill(true),
+          mode: '+2',
+        },
+      },
+      order: {
+        leverage: 5,
+        positionRatio: 50,
+        maxPosition: 40000,
+        tpMode: 'amp',
+        tpRatio: 44,
+        tpFixed: 2,
+        tpAmp: 25,
+        tpEnabled: true,
+        slMode: 'amp',
+        slRatio: 85,
+        slFixed: 3,
+        slAmp: 55,
+        slEnabled: false,
+        mLinkEnabled: false,
+        mLinkValue: 1800,
+        positiveWindow: 0.7,
+        maxHoldTime: 15,
+        kBestPeriod: "15m",
+        kBestWindow: [1, 5],
+      },
+      withdrawal: {
+        withdrawalThreshold: 2088,
+        retentionThreshold: 1988,
+        alarmThreshold: 5,
+      },
+    }
+  ],
+  email: {
+    enabled: true,
+    sender: "",
+    receiver: "",
+    smtpServer: "",
+    smtpPort: 465,
+    password: "",
+    minBalance: 5,
+    maxConsecutiveLoss: 30000,
+  },
+  auth: {
+    username: "admin",
+    password: "Xxxxxx123!",
+  },
+};
