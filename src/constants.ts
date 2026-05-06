@@ -107,7 +107,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     {
       id: "1",
       name: "xuni",
-      enabled: false,
+      enabled: true,
       isMasterAccount: false,
       binance: {
         apiKey: "VsOQrj0yiCqTzDvYtQIXFj1UOqGrXJx8sMlJ1OjRYHcSWZgohExAANZnqFPAKrcZ",
@@ -174,8 +174,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
         tpRatioSell: 44,
         tpFixedBuy: 2,
         tpFixedSell: 2,
-        tpAmpBuy: 20,
-        tpAmpSell: 20,
+        tpAmpBuy: 25,
+        tpAmpSell: 25,
         tpEnabled: true,
         tpBuyEnabled: true,
         tpSellEnabled: true,
